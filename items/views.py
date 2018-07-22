@@ -6,8 +6,9 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Item
-from .serializers import ItemSerializer
+from items import filters
+from .models import Item, Notification
+from .serializers import ItemSerializer, NotificationSerializer
 
 
 # class BrandList(generics.ListCreateAPIView):
@@ -34,3 +35,9 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                         variants__last_modified_by=self.request.user,
                         variants__properties__last_modified_by=self.request.user
         )
+
+
+class NotificationList(generics.ListAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    filter_backends = (filters.NotificationFilter,)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Item, Variant, Property
+from .models import Item, Variant, Property, Notification
 
 
 class PropertySerializer(serializers.ModelSerializer):
@@ -100,3 +100,9 @@ class ItemSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
