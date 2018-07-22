@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'aldjemy',
+    'fieldsignals',
     'rest_framework',
-    'apps.items',
+    'items.apps.ItemsConfig',
 ]
 
 MIDDLEWARE = [

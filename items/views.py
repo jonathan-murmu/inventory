@@ -21,7 +21,16 @@ class ItemList(generics.ListCreateAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(last_modified_by=self.request.user)
+
 
 class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(last_modified_by=self.request.user,
+                        variants__last_modified_by=self.request.user,
+                        variants__properties__last_modified_by=self.request.user
+        )
