@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import Item, Variant, Property, Notification
@@ -101,8 +102,24 @@ class ItemSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#
+# class NotificationSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Notification
+#         fields = '__all__'
+
 
 class NotificationSerializer(serializers.ModelSerializer):
+    time = serializers.DateTimeField(read_only=True)
+    fields = serializers.CharField(allow_blank=True, allow_null=True, max_length=255,
+                      required=False)
+    # action = serializers.ChoiceField(
+    #     choices=(('1', 'created'), ('2', 'deleted'), ('3', 'modified')))
+    action = serializers.ChoiceField(choices=Notification.ACTION_CHOICES)
+    item = serializers.CharField(max_length=255)
+    # user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    user__username = serializers.CharField(max_length=255)
+
     class Meta:
         model = Notification
-        fields = '__all__'
+        fields = ('time', 'fields', 'action', 'item', 'user__username')

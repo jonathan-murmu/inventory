@@ -44,7 +44,7 @@ def variant_field_changes(sender, instance, changed_fields=None,
 
         print "%s changed from %s to %s" % (field.name, old, new)
 
-        add_notification(item=instance, field=field.name, action=MODIFY,
+        add_notification(item=instance.item, field=field.name, action=MODIFY,
                          user=instance.last_modified_by)
 
 
@@ -56,5 +56,5 @@ def property_field_changes(sender, instance, changed_fields=None,
 
         print "%s changed from %s to %s" % (field.name, old, new)
 
-        add_notification(item=instance, field=field.name, action=MODIFY,
+        add_notification(item=instance.variant.item, field=field.name, action=MODIFY,
                          user=instance.last_modified_by)
