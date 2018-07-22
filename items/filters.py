@@ -8,13 +8,9 @@ from items.constants import DATE_RANGE, USER_KEY
 
 class NotificationFilter(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        filters, q_list = get_filters(request)
-        if filters and not q_list:
+        filters = get_filters(request)
+        if filters:
             return queryset.filter(**filters)
-        elif q_list and not filters:
-            return queryset.filter(q_list)
-        elif filters and q_list:
-            return queryset.filter(q_list).filter(**filters)
         else:
             return queryset
 
@@ -29,15 +25,16 @@ def get_filters(request):
         http://domain/articles/?d=2017-01-31_now/
     """
     main_filter = {}
-    q_list = []  # Q object for querying users
     try:
         for key in request.query_params:
             # splitting the last '/' in the url
             value = request.query_params[key].split('/')[0]
+            # filter by date range
             if key == DATE_RANGE:
                 date_range = get_date_range_filter(value)
                 main_filter['time__gte'] = date_range['from_date']
                 main_filter['time__lte'] = date_range['to_date']
+            # filter by user id
             elif key == USER_KEY:
                 user_obj = User.objects.get(pk=value)
                 main_filter['user'] = user_obj
@@ -45,7 +42,7 @@ def get_filters(request):
     except:
         pass
 
-    return main_filter, q_list
+    return main_filter
 
 
 def get_date_range_filter(value):

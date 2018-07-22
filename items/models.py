@@ -51,6 +51,7 @@ class Property(models.Model):
 
 
 class Notification(models.Model):
+    """Notification feed data."""
     ACTION_CHOICES = (
         (CREATE, 'created'),
         (DELETE, 'deleted'),
@@ -60,10 +61,11 @@ class Notification(models.Model):
     time = models.DateTimeField(auto_now_add=True)
 
     # field which is being added/modified/deleted.
+    # field is None when the Item is created.
     field = models.CharField(max_length=255, null=True, blank=True)
     # action done on a field.
     action = models.CharField(choices=ACTION_CHOICES, max_length=1)
-    # item
+    # item for which the field is added/modified/deleted.
     item = models.CharField(max_length=255)
     # user
     user = models.ForeignKey(User)
